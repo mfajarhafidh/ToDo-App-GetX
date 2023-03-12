@@ -1,7 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/app/core/utils/extensions.dart';
@@ -73,25 +71,24 @@ class AddCard extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                        ),
-                        minimumSize: const Size(150, 40)
-                      ),
+                          backgroundColor: blue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          minimumSize: const Size(150, 40)),
                       onPressed: () {
-                        if(homeCtrl.formKey.currentState!.validate()){
-                          int icon = icons[homeCtrl.chipIndex.value].icon!.codePoint;
-                          String color = icons[homeCtrl.chipIndex.value].color!.toHex();
+                        if (homeCtrl.formKey.currentState!.validate()) {
+                          int icon =
+                              icons[homeCtrl.chipIndex.value].icon!.codePoint;
+                          String color =
+                              icons[homeCtrl.chipIndex.value].color!.toHex();
                           var task = Task(
-                            title: homeCtrl.editController.text,
-                            icon: icon,
-                            color: color
-                          );
+                              title: homeCtrl.editController.text,
+                              icon: icon,
+                              color: color);
                           Get.back();
-                          homeCtrl.addTask(task) ?
-                          EasyLoading.showSuccess('Create Success') :
-                          EasyLoading.showError('Duplicated Task');
+                          homeCtrl.addTask(task)
+                              ? EasyLoading.showSuccess('Create Success')
+                              : EasyLoading.showError('Duplicated Task');
                         }
                       },
                       child: const Text('Confirm'),
@@ -99,8 +96,8 @@ class AddCard extends StatelessWidget {
                   ],
                 ),
               ));
-              homeCtrl.editController.clear();
-              homeCtrl.changeChipIndex(0);
+          homeCtrl.editController.clear();
+          homeCtrl.changeChipIndex(0);
         },
         child: DottedBorder(
           color: Colors.grey[400]!,
