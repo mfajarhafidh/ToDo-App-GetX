@@ -9,12 +9,18 @@ class HomeController extends GetxController {
   HomeController({required this.taskRepository});
   final formKey = GlobalKey<FormState>();
   final editController = TextEditingController();
+  final tabIndex = 0.obs;
   final chipIndex = 0.obs;
   final deleting = false.obs;
   final tasks = <Task>[].obs;
   final task = Rx<Task?>(null);
   final doingTodos = <dynamic>[].obs;
   final doneTodos = <dynamic>[].obs;
+
+  sendToDetail() {
+    tasks.assignAll(taskRepository.readTasks());
+    ever(tasks, (_) => taskRepository.writeTasks(tasks));
+  }
 
   @override
   void onInit() {
@@ -27,6 +33,10 @@ class HomeController extends GetxController {
   void onClose() {
     editController.dispose();
     super.onClose();
+  }
+
+  void changeTabIndex(int index) {
+    tabIndex.value = index;
   }
 
   void changeChipIndex(int value) {
@@ -136,6 +146,30 @@ class HomeController extends GetxController {
     for (int i = 0; i < task.todos!.length; i++) {
       if (task.todos![i]['done'] == true) {
         res += 1;
+      }
+    }
+    return res;
+  }
+
+  int getTotalTask() {
+    var res = 0;
+    for (int i = 0; i < tasks.length; i++) {
+      if (tasks[i].todos != null) {
+        res += tasks[i].todos!.length;
+      }
+    }
+    return res;
+  }
+
+  int getTotalDoneTask() {
+    var res = 0;
+    for (int i = 0; i < tasks.length; i++) {
+      if (tasks[i].todos != null) {
+        for (int j = 0; j < tasks[i].todos!.length; j++) {
+          if (tasks[i].todos![j]['done'] == true) {
+            res += 1;
+          }
+        }
       }
     }
     return res;

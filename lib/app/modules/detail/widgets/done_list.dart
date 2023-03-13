@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/app/core/utils/extensions.dart';
 import 'package:todo_app/app/core/values/colors.dart';
+import 'package:todo_app/app/modules/detail/controllers/detail_controller.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class DoneList extends StatelessWidget {
-  final homeCtrl = Get.find<HomeController>();
-  DoneList({super.key});
-
+class DoneList extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => homeCtrl.doneTodos.isNotEmpty
+    return Obx(() => controller.doneTodos.isNotEmpty
         ? ListView(
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
@@ -22,14 +17,14 @@ class DoneList extends StatelessWidget {
                 padding:
                     EdgeInsets.symmetric(vertical: 2.0.wp, horizontal: 5.0.wp),
                 child: Text(
-                  'Completed (${homeCtrl.doneTodos.length})',
+                  'Completed (${controller.doneTodos.length})',
                   style: TextStyle(fontSize: 14.0.sp, color: Colors.grey),
                 ),
               ),
-              ...homeCtrl.doneTodos.map((element) => Dismissible(
+              ...controller.doneTodos.map((element) => Dismissible(
                     key: ObjectKey(element),
                     direction: DismissDirection.endToStart,
-                    onDismissed: (_) => homeCtrl.deleteDoneTodo(element),
+                    onDismissed: (_) => controller.deleteDoneTodo(element),
                     background: Container(
                       color: Colors.red.withOpacity(0.8),
                       alignment: Alignment.centerRight,

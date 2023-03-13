@@ -1,7 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/app/core/utils/extensions.dart';
@@ -10,10 +8,7 @@ import 'package:todo_app/app/data/models/task.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 import 'package:todo_app/app/widgets/icons.dart';
 
-class AddCard extends StatelessWidget {
-  final homeCtrl = Get.find<HomeController>();
-  AddCard({super.key});
-
+class AddCard extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final icons = getIcons();
@@ -25,17 +20,36 @@ class AddCard extends StatelessWidget {
       child: InkWell(
         onTap: () async {
           await Get.defaultDialog(
-              titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
+              titlePadding: EdgeInsets.symmetric(vertical: 3.0.wp),
               radius: 5,
               title: 'Task Type',
               content: Form(
-                key: homeCtrl.formKey,
+                key: controller.formKey,
                 child: Column(
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 3.0.wp),
                       child: TextFormField(
-                        controller: homeCtrl.editController,
+                        onFieldSubmitted: (value) {
+                          if (controller.formKey.currentState!.validate()) {
+                            int icon = icons[controller.chipIndex.value]
+                                .icon!
+                                .codePoint;
+                            String color = icons[controller.chipIndex.value]
+                                .color!
+                                .toHex();
+                            var task = Task(
+                                title: controller.editController.text,
+                                icon: icon,
+                                color: color);
+                            Get.back();
+                            controller.addTask(task)
+                                ? EasyLoading.showSuccess('Create Success')
+                                : EasyLoading.showError('Duplicated Task');
+                          }
+                        },
+                        autofocus: true,
+                        controller: controller.editController,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Title',
@@ -61,9 +75,10 @@ class AddCard extends StatelessWidget {
                                     pressElevation: 0,
                                     backgroundColor: Colors.white,
                                     label: e,
-                                    selected: homeCtrl.chipIndex.value == index,
+                                    selected:
+                                        controller.chipIndex.value == index,
                                     onSelected: (bool selected) {
-                                      homeCtrl.chipIndex.value =
+                                      controller.chipIndex.value =
                                           selected ? index : 0;
                                     },
                                   );
@@ -73,25 +88,24 @@ class AddCard extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                        ),
-                        minimumSize: const Size(150, 40)
-                      ),
+                          backgroundColor: blue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          minimumSize: const Size(150, 40)),
                       onPressed: () {
-                        if(homeCtrl.formKey.currentState!.validate()){
-                          int icon = icons[homeCtrl.chipIndex.value].icon!.codePoint;
-                          String color = icons[homeCtrl.chipIndex.value].color!.toHex();
+                        if (controller.formKey.currentState!.validate()) {
+                          int icon =
+                              icons[controller.chipIndex.value].icon!.codePoint;
+                          String color =
+                              icons[controller.chipIndex.value].color!.toHex();
                           var task = Task(
-                            title: homeCtrl.editController.text,
-                            icon: icon,
-                            color: color
-                          );
+                              title: controller.editController.text,
+                              icon: icon,
+                              color: color);
                           Get.back();
-                          homeCtrl.addTask(task) ?
-                          EasyLoading.showSuccess('Create Success') :
-                          EasyLoading.showError('Duplicated Task');
+                          controller.addTask(task)
+                              ? EasyLoading.showSuccess('Create Success')
+                              : EasyLoading.showError('Duplicated Task');
                         }
                       },
                       child: const Text('Confirm'),
@@ -99,8 +113,8 @@ class AddCard extends StatelessWidget {
                   ],
                 ),
               ));
-              homeCtrl.editController.clear();
-              homeCtrl.changeChipIndex(0);
+          controller.editController.clear();
+          controller.changeChipIndex(0);
         },
         child: DottedBorder(
           color: Colors.grey[400]!,

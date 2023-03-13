@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/app/core/utils/extensions.dart';
+import 'package:todo_app/app/modules/detail/controllers/detail_controller.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class DoingList extends StatelessWidget {
-  final homeCtrl = Get.find<HomeController>();
-  DoingList({super.key});
-
+class DoingList extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => homeCtrl.doingTodos.isEmpty && homeCtrl.doneTodos.isEmpty
+    return Obx(() => controller.doingTodos.isEmpty &&
+            controller.doneTodos.isEmpty
         ? Column(
             children: [
               Image.asset(
@@ -31,7 +27,7 @@ class DoingList extends StatelessWidget {
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
             children: [
-              ...homeCtrl.doingTodos
+              ...controller.doingTodos
                   .map((element) => Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 3.0.wp, horizontal: 9.0.wp),
@@ -45,7 +41,7 @@ class DoingList extends StatelessWidget {
                                       (states) => Colors.grey),
                                   value: element['done'],
                                   onChanged: (value) {
-                                    homeCtrl.doneTodo(element['title']);
+                                    controller.doneTodo(element['title']);
                                   }),
                             ),
                             Padding(
@@ -59,7 +55,7 @@ class DoingList extends StatelessWidget {
                         ),
                       ))
                   .toList(),
-              if (homeCtrl.doingTodos.isNotEmpty)
+              if (controller.doingTodos.isNotEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.0.wp),
                   child: Divider(

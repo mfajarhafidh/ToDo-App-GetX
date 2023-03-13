@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:todo_app/app/core/utils/extensions.dart';
 import 'package:todo_app/app/data/models/task.dart';
-import 'package:todo_app/app/modules/detail/views/detail_view.dart';
+import 'package:todo_app/app/modules/detail/controllers/detail_controller.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
+import 'package:todo_app/app/routes/app_pages.dart';
 
-class TaskCard extends StatelessWidget {
-  final homeCtrl = Get.find<HomeController>();
+class TaskCard extends GetView<HomeController> {
   final Task task;
   TaskCard({super.key, required this.task});
 
@@ -19,9 +17,9 @@ class TaskCard extends StatelessWidget {
     var squareWidth = Get.width - 12.0.wp;
     return GestureDetector(
       onTap: () {
-        homeCtrl.changeTask(task);
-        homeCtrl.changeTodos(task.todos ?? []);
-        Get.to(() => DetailView());
+        controller.changeTask(task);
+        controller.changeTodos(task.todos ?? []);
+        Get.toNamed(Routes.DETAIL);
       },
       child: Container(
         width: squareWidth / 2,
@@ -37,9 +35,11 @@ class TaskCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             StepProgressIndicator(
-              totalSteps: homeCtrl.isTodosEmpty(task) ? 1 : task.todos!.length,
-              currentStep:
-                  homeCtrl.isTodosEmpty(task) ? 0 : homeCtrl.getDoneTodo(task),
+              totalSteps:
+                  controller.isTodosEmpty(task) ? 1 : task.todos!.length,
+              currentStep: controller.isTodosEmpty(task)
+                  ? 0
+                  : controller.getDoneTodo(task),
               size: 5,
               padding: 0,
               selectedGradientColor: LinearGradient(
