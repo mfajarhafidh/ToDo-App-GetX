@@ -4,23 +4,21 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:todo_app/app/core/utils/extensions.dart';
+import 'package:todo_app/app/modules/detail/controllers/detail_controller.dart';
 import 'package:todo_app/app/modules/detail/widgets/doing_list.dart';
 import 'package:todo_app/app/modules/detail/widgets/done_list.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class DetailView extends StatelessWidget {
-  final homeCtrl = Get.find<HomeController>();
-  DetailView({super.key});
-
+class DetailView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    var task = homeCtrl.task.value!;
+    var task = controller.task.value!;
     var color = HexColor.fromHex(task.color);
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
           body: Form(
-        key: homeCtrl.formKey,
+        key: controller.formKey,
         child: ListView(
           children: [
             Padding(
@@ -30,9 +28,9 @@ class DetailView extends StatelessWidget {
                   IconButton(
                       onPressed: () {
                         Get.back();
-                        homeCtrl.updateTodos();
-                        homeCtrl.changeTask(null);
-                        homeCtrl.editController.clear();
+                        controller.updateTodos();
+                        controller.changeTask(null);
+                        controller.editController.clear();
                       },
                       icon: const Icon(Icons.arrow_back))
                 ],
@@ -62,7 +60,7 @@ class DetailView extends StatelessWidget {
             ),
             Obx(() {
               var totalTodos =
-                  homeCtrl.doingTodos.length + homeCtrl.doneTodos.length;
+                  controller.doingTodos.length + controller.doneTodos.length;
               return Padding(
                 padding:
                     EdgeInsets.only(left: 16.0.wp, top: 3.0.wp, right: 16.0.wp),
@@ -78,7 +76,7 @@ class DetailView extends StatelessWidget {
                     Expanded(
                       child: StepProgressIndicator(
                         totalSteps: totalTodos == 0 ? 1 : totalTodos,
-                        currentStep: homeCtrl.doneTodos.length,
+                        currentStep: controller.doneTodos.length,
                         size: 5,
                         padding: 0,
                         selectedGradientColor: LinearGradient(
@@ -99,7 +97,20 @@ class DetailView extends StatelessWidget {
               padding:
                   EdgeInsets.symmetric(vertical: 2.0.wp, horizontal: 5.0.wp),
               child: TextFormField(
-                controller: homeCtrl.editController,
+                //Modified
+                onFieldSubmitted: (value) {
+                  if (controller.formKey.currentState!.validate()) {
+                    var success =
+                        controller.addTodo(controller.editController.text);
+                    if (success) {
+                      EasyLoading.showSuccess('Todo item add success');
+                    } else {
+                      EasyLoading.showError('Todo item already exist');
+                    }
+                    controller.editController.clear();
+                  }
+                },
+                controller: controller.editController,
                 autofocus: true,
                 decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
@@ -111,15 +122,15 @@ class DetailView extends StatelessWidget {
                     ),
                     suffixIcon: IconButton(
                       onPressed: () {
-                        if (homeCtrl.formKey.currentState!.validate()) {
-                          var success =
-                              homeCtrl.addTodo(homeCtrl.editController.text);
+                        if (controller.formKey.currentState!.validate()) {
+                          var success = controller
+                              .addTodo(controller.editController.text);
                           if (success) {
                             EasyLoading.showSuccess('Todo item add success');
                           } else {
                             EasyLoading.showError('Todo item already exist');
                           }
-                          homeCtrl.editController.clear();
+                          controller.editController.clear();
                         }
                       },
                       icon: const Icon(Icons.done),

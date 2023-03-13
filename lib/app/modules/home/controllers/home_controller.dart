@@ -17,6 +17,11 @@ class HomeController extends GetxController {
   final doingTodos = <dynamic>[].obs;
   final doneTodos = <dynamic>[].obs;
 
+  sendToDetail() {
+    tasks.assignAll(taskRepository.readTasks());
+    ever(tasks, (_) => taskRepository.writeTasks(tasks));
+  }
+
   @override
   void onInit() {
     super.onInit();

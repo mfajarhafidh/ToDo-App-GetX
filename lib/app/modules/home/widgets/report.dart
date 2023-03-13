@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -6,16 +7,13 @@ import 'package:todo_app/app/core/utils/extensions.dart';
 import 'package:todo_app/app/core/values/colors.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class ReportPage extends StatelessWidget {
-  final homeCtrl = Get.find<HomeController>();
-  ReportPage({super.key});
-
+class ReportPage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(child: Obx(() {
-        var createdTasks = homeCtrl.getTotalTask();
-        var completedTasks = homeCtrl.getTotalDoneTask();
+        var createdTasks = controller.getTotalTask();
+        var completedTasks = controller.getTotalDoneTask();
         var liveTasks = createdTasks - completedTasks;
         var percent = (completedTasks / createdTasks * 100).toStringAsFixed(0);
         return ListView(children: [

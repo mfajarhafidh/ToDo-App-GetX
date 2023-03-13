@@ -4,17 +4,14 @@ import 'package:get/get.dart';
 import 'package:todo_app/app/core/utils/extensions.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class AddDialog extends StatelessWidget {
-  final homeCtrl = Get.find<HomeController>();
-  AddDialog({super.key});
-
+class AddDialog extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         body: Form(
-          key: homeCtrl.formKey,
+          key: controller.formKey,
           child: ListView(
             children: [
               Padding(
@@ -25,8 +22,8 @@ class AddDialog extends StatelessWidget {
                     IconButton(
                       onPressed: () {
                         Get.back();
-                        homeCtrl.editController.clear();
-                        homeCtrl.changeTask(null);
+                        controller.editController.clear();
+                        controller.changeTask(null);
                       },
                       icon: const Icon(Icons.close),
                     ),
@@ -35,18 +32,18 @@ class AddDialog extends StatelessWidget {
                           overlayColor:
                               MaterialStateProperty.all(Colors.transparent)),
                       onPressed: () {
-                        if (homeCtrl.formKey.currentState!.validate()) {
-                          if (homeCtrl.task.value == null) {
+                        if (controller.formKey.currentState!.validate()) {
+                          if (controller.task.value == null) {
                             EasyLoading.showError(
                                 'Please select the task type');
                           } else {
-                            var success = homeCtrl.updateTask(
-                                homeCtrl.task.value!,
-                                homeCtrl.editController.text);
+                            var success = controller.updateTask(
+                                controller.task.value!,
+                                controller.editController.text);
                             if (success) {
                               EasyLoading.showSuccess('Todo item add sucess');
                               Get.back();
-                              homeCtrl.changeTask(null);
+                              controller.changeTask(null);
                             } else {
                               EasyLoading.showError('Todo item already exist');
                             }
@@ -72,7 +69,7 @@ class AddDialog extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5.0.wp),
                 child: TextFormField(
-                  controller: homeCtrl.editController,
+                  controller: controller.editController,
                   decoration: InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey[400]!))),
@@ -97,9 +94,9 @@ class AddDialog extends StatelessWidget {
                   style: TextStyle(fontSize: 14.0.sp, color: Colors.grey),
                 ),
               ),
-              ...homeCtrl.tasks
+              ...controller.tasks
                   .map((element) => Obx(() => InkWell(
-                        onTap: () => homeCtrl.changeTask(element),
+                        onTap: () => controller.changeTask(element),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 3.0.wp, horizontal: 5.0.wp),
@@ -124,7 +121,7 @@ class AddDialog extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              if (homeCtrl.task.value == element)
+                              if (controller.task.value == element)
                                 const Icon(
                                   Icons.check,
                                   color: Colors.blue,
