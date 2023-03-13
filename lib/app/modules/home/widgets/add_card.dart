@@ -20,7 +20,7 @@ class AddCard extends GetView<HomeController> {
       child: InkWell(
         onTap: () async {
           await Get.defaultDialog(
-              titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
+              titlePadding: EdgeInsets.symmetric(vertical: 3.0.wp),
               radius: 5,
               title: 'Task Type',
               content: Form(
@@ -30,6 +30,24 @@ class AddCard extends GetView<HomeController> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 3.0.wp),
                       child: TextFormField(
+                        onFieldSubmitted: (value) {
+                          if (controller.formKey.currentState!.validate()) {
+                            int icon = icons[controller.chipIndex.value]
+                                .icon!
+                                .codePoint;
+                            String color = icons[controller.chipIndex.value]
+                                .color!
+                                .toHex();
+                            var task = Task(
+                                title: controller.editController.text,
+                                icon: icon,
+                                color: color);
+                            Get.back();
+                            controller.addTask(task)
+                                ? EasyLoading.showSuccess('Create Success')
+                                : EasyLoading.showError('Duplicated Task');
+                          }
+                        },
                         autofocus: true,
                         controller: controller.editController,
                         decoration: const InputDecoration(
