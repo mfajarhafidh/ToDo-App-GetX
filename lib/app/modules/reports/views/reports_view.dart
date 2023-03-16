@@ -7,7 +7,9 @@ import 'package:todo_app/app/core/utils/extensions.dart';
 import 'package:todo_app/app/core/values/colors.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class ReportPage extends GetView<HomeController> {
+import '../controllers/reports_controller.dart';
+
+class ReportsView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

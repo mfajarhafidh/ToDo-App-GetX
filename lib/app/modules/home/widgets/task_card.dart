@@ -19,7 +19,13 @@ class TaskCard extends GetView<HomeController> {
       onTap: () {
         controller.changeTask(task);
         controller.changeTodos(task.todos ?? []);
-        Get.toNamed(Routes.DETAIL);
+        Get.toNamed(Routes.DETAIL, arguments: [
+          {'task': task},
+          {'taskColor': task.color},
+          {'taskIcon': task.icon},
+          {'taskTodos': task.todos},
+          {'taskTitle': task.title},
+        ]);
       },
       child: Container(
         width: squareWidth / 2,

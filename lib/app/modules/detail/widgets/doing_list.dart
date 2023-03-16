@@ -4,7 +4,7 @@ import 'package:todo_app/app/core/utils/extensions.dart';
 import 'package:todo_app/app/modules/detail/controllers/detail_controller.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class DoingList extends GetView<HomeController> {
+class DoingList extends GetView<DetailController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.doingTodos.isEmpty &&

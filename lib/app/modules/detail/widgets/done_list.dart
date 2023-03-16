@@ -5,7 +5,7 @@ import 'package:todo_app/app/core/values/colors.dart';
 import 'package:todo_app/app/modules/detail/controllers/detail_controller.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class DoneList extends GetView<HomeController> {
+class DoneList extends GetView<DetailController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.doneTodos.isNotEmpty
