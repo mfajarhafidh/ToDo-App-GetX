@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:todo_app/app/core/utils/extensions.dart';
 import 'package:todo_app/app/modules/detail/controllers/detail_controller.dart';
@@ -9,10 +10,11 @@ import 'package:todo_app/app/modules/detail/widgets/doing_list.dart';
 import 'package:todo_app/app/modules/detail/widgets/done_list.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
-class DetailView extends GetView<HomeController> {
+class DetailView extends GetView<DetailController> {
   @override
   Widget build(BuildContext context) {
     var task = controller.task.value!;
+    // var colorGet = controller.taskColor;
     var color = HexColor.fromHex(task.color);
     return WillPopScope(
       onWillPop: () async => false,

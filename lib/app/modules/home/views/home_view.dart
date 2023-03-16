@@ -6,8 +6,8 @@ import 'package:todo_app/app/core/utils/extensions.dart';
 import 'package:todo_app/app/data/models/task.dart';
 import 'package:todo_app/app/modules/home/widgets/add_card.dart';
 import 'package:todo_app/app/modules/home/widgets/add_dialog.dart';
-import 'package:todo_app/app/modules/home/widgets/report.dart';
 import 'package:todo_app/app/modules/home/widgets/task_card.dart';
+import 'package:todo_app/app/modules/reports/views/reports_view.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -49,7 +49,7 @@ class HomeView extends GetView<HomeController> {
                     ))
               ],
             )),
-            ReportPage()
+            ReportsView()
           ])),
       floatingActionButton: DragTarget<Task>(
         builder: (_, __, ___) {
